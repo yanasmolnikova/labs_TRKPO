@@ -1,2 +1,2 @@
-# labs_TRKPO
+# JAVA labs
 labs for TRKPO
