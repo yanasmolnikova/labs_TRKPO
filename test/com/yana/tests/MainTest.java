@@ -1,6 +1,5 @@
 package com.yana.tests;
 
-import com.yana.lab1.Main;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,7 @@ class MainTest {
     @DisplayName("check swap method")
     void swap() {
         int[] array = {1, 2, 3, 4, 5, 6};
-        boolean result = Main.swap(3, 4, array);
+        boolean result = com.yana.lab1.Main.swap(3, 4, array);
         assertTrue(result);
         assertEquals(array[3], 5);
         assertEquals(array[4], 4);
@@ -22,7 +21,7 @@ class MainTest {
     @DisplayName("check swap method with incorrect index")
     void swapIndexOutOfBounds(){
         int[] array = {1, 2, 3, 4, 5, 6};
-        boolean result = Main.swap(6, 7, array);
+        boolean result = com.yana.lab1.Main.swap(6, 7, array);
         assertFalse(result);
     }
 
@@ -30,7 +29,7 @@ class MainTest {
     @DisplayName("check swap method with the same index")
     void swapTheSameIndex(){
         int[] array = {1, 2, 3, 4, 5, 6};
-        boolean result = Main.swap(3, 3, array);
+        boolean result = com.yana.lab1.Main.swap(3, 3, array);
         assertTrue(result);
     }
 
