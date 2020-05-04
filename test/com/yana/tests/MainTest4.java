@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MainTest3 {
+class MainTest4 {
     @Test
     @DisplayName("check swap method")
     void swapGeneric() {
