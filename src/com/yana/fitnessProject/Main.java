@@ -20,18 +20,14 @@ import javax.swing.border.TitledBorder;
 
 class Main extends JFrame {
 
-    private int counterPushUps, counterJumpRope, counterSquats;       // время на разные виды тренировок
+    private int counterPushUps, counterJumpRope, counterSquats;     //время для каждой тренировки
 
-    // счетчик срабатываний секундомера
-    //  private int timerCount;
-    // период срабатывания секундомером  для всех упражнений
-
-    private int timerDelPushUps = 0;
-    private int timerDelJumpRope = 0;
-    private int timerDelSquats = 0;
-    private float caloriesInHour;        //калория в 1 час
-    private float caloriesPushUos, caloriesJumpRope, caloriesSquats;       //подсчет калорий
-    private float caloriesInSecond;        // в одну секунду
+    private int timeDelPushUps = 0;
+    private int timeDelJumpRope = 0;
+    private int timeDelSquats = 0;
+    private float caloriesInHour;
+    private float caloriesPushUps, caloriesJumpRope, caloriesSquats;
+    private float caloriesInSecond;
     private int timerStep = 1000;   //шаг равен 1 секунде, период секундомера 1000мс = 1 сек
 
     private JTextArea trainingStatus = new JTextArea("START YOUR TRAINING");
@@ -44,46 +40,44 @@ class Main extends JFrame {
     private JButton startSquats = new JButton("Start SQUATS");
     private JButton stop = new JButton("STOP, SHOW MY RESULTS");
     private JButton clearAllResults = new JButton("CLEAR ALL RESULTS");
-    private JLabel labelPushUps = new JLabel("");        //отжимания
-    private JLabel labelJumpRope = new JLabel("");     //скакалка
-    private JLabel labelSquats = new JLabel("");       //приседания
+    private JLabel labelPushUps = new JLabel("");
+    private JLabel labelJumpRope = new JLabel("");
+    private JLabel labelSquats = new JLabel("");
     private JLabel labelPushUpsResult = new JLabel("");
     private JLabel labelJumpRopeResults = new JLabel("");
     private JLabel labelSquatsResults = new JLabel("");
     private JLabel labelAllResults = new JLabel("");
-    private DecimalFormat df = new DecimalFormat("#####.##");       // округление калорий до
-    private String fileName = "data.txt";       // файл для персистенции
+    private DecimalFormat df = new DecimalFormat("#####.##");
+    private String fileName = "data.txt";
 
-    private Timer timerPushUps;
-    private Timer timerJumpRope;       // секундомеры для трех кнопок
-    private Timer timerSquats;
+    private Timer timePushUps;
+    private Timer timeJumpRope;
+    private Timer timeSquats;
 
-    // конструктор
     public Main() throws IOException {
 
         initComponents();
 
-        TimeClass timerClassPushUps = new TimeClass(timerDelPushUps);
+        TimeClassPushUps timeClassPushUps = new TimeClassPushUps(timeDelPushUps);
 
-        timerPushUps = new Timer(timerStep, timerClassPushUps);
+        timePushUps = new Timer(timerStep, timeClassPushUps);
 
-        TimeClass1 timerClassJumpRope = new TimeClass1(timerDelJumpRope);
+        TimeClassJumpRope timeClassJumpRope = new TimeClassJumpRope(timeDelJumpRope);
 
-        timerJumpRope = new Timer(timerStep, timerClassJumpRope);
+        timeJumpRope = new Timer(timerStep, timeClassJumpRope);
 
-        TimeClass2 timerClassSquats = new TimeClass2(timerDelSquats);
+        TimeClassSquats timeClassSquats = new TimeClassSquats(timeDelSquats);
 
-        timerSquats = new Timer(timerStep, timerClassSquats);
+        timeSquats = new Timer(timerStep, timeClassSquats);
     }
 
-    // метод инициализации компонентов формы
-    private void initComponents() throws IOException {
+    private void initComponents() {
 
-        setBounds(15, 30, 1200, 200);        //положение на экране
+        setBounds(30, 30, 1200, 200);
 
-        setSize(1200, 300);      // размер формы
+        setSize(1200, 300);
 
-        Container container = getContentPane();     // контейнер для размещения компонентов формы
+        Container container = getContentPane();
 
         trainingStatus.setPreferredSize(new Dimension(250, 20));        // окно вывода статуса тренировки
         trainingStatus.setSize(20, 20);
@@ -92,9 +86,9 @@ class Main extends JFrame {
         startJumpRope.setPreferredSize(new Dimension(200, 40));
         startSquats.setPreferredSize(new Dimension(200, 40));
 
-        startPushUps.addActionListener(new startEventListener());
-        startJumpRope.addActionListener(new startEventListener1());
-        startSquats.addActionListener(new startEventListener2());
+        startPushUps.addActionListener(new startEventListenerPushUps());
+        startJumpRope.addActionListener(new startEventListenerJumpRope());
+        startSquats.addActionListener(new startEventListenerSquats());
 
         stop.setPreferredSize(new Dimension(200, 40));
         stop.addActionListener(new stopEventListener());
@@ -134,58 +128,55 @@ class Main extends JFrame {
         container.add(BorderLayout.EAST, panelResults);
     }
 
-    // класс имплементации события нажатия старт
-    class startEventListener implements ActionListener {
+    class startEventListenerPushUps implements ActionListener {
 
         @Override
-
         public void actionPerformed(ActionEvent e) {        // обработка события нажатия на button start отжимание
             trainingStatus.setText("PUSH UPS");
 
-            timerPushUps.start();
-            timerPushUps.setRepeats(true);      // старт секундомера с повторением
+            timePushUps.start();
+            timePushUps.setRepeats(true);      // старт секундомера с повторением
 
-            timerJumpRope.stop();       // остановка других секундомеров, если они включены
-            timerSquats.stop();
+            timeJumpRope.stop();       // остановка других секундомеров, если они включены
+            timeSquats.stop();
         }
     }
+    //EventListener eventListener = new EventListener("PUSH UPS", trainingStatus, timePushUps, timeJumpRope, timeSquats);
+    //траблы
 
-    class startEventListener1 implements ActionListener {
+    class startEventListenerJumpRope implements ActionListener {
 
         @Override
-        // обработка события нажатия на button start скакалка
         public void actionPerformed(ActionEvent e) {
 
             trainingStatus.setText("JUMP ROPE");
 
-            timerJumpRope.start();
-            timerJumpRope.setRepeats(true);
+            timeJumpRope.start();
+            timeJumpRope.setRepeats(true);
 
-            timerPushUps.stop();
-            timerSquats.stop();
+            timePushUps.stop();
+            timeSquats.stop();
         }
     }
 
-    class startEventListener2 implements ActionListener {
+    class startEventListenerSquats implements ActionListener {
 
         @Override
-        // обработка события нажатия на button start приседание
         public void actionPerformed(ActionEvent e) {
             trainingStatus.setText("SQUATS");
 
-            timerSquats.start();
-            timerSquats.setRepeats(true);
+            timeSquats.start();
+            timeSquats.setRepeats(true);
 
-            timerJumpRope.stop();
-            timerPushUps.stop();
+            timeJumpRope.stop();
+            timePushUps.stop();
         }
     }
 
-    //  класс пререзагружаемого счетчика секундомера
-    public class TimeClass implements ActionListener {
+    public class TimeClassPushUps implements ActionListener {
 
         // конструктор
-        public TimeClass(int count) {
+        public TimeClassPushUps(int count) {
             counterPushUps = count;
         }
 
@@ -196,18 +187,30 @@ class Main extends JFrame {
             caloriesInHour = 30;        // за один час
             caloriesInSecond = caloriesInHour / 3600;       // в одну секунду
             counterPushUps ++;       // секундомер текущий
-            caloriesPushUos ++;     // текущий подсчет
-            caloriesPushUos = counterPushUps * caloriesInSecond;        // формулы для подсчета
+            caloriesPushUps ++;     // текущий подсчет
+            caloriesPushUps = counterPushUps * caloriesInSecond;        // формулы для подсчета
             if (counterPushUps > 0) {
                 // если время пошло, появляется надпись
-                labelPushUps.setText("PUSH UPS - time: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUos));
+                labelPushUps.setText("PUSH UPS - time: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps));
             }
         }
     }
 
-    public class TimeClass1 implements ActionListener {
-        // время пошло , скакалка
-        public TimeClass1(int count) {
+//    TimeClass timeClassPushUps = new TimeClass(counterPushUps, "PUSH UPS", labelPushUps, df);
+//
+//    public TimeClass getTimeClassPushUps() {
+//        return timeClassPushUps;
+//    }
+//
+//    public void setTimeClassPushUps(TimeClass timeClassPushUps) {
+//        this.timeClassPushUps = timeClassPushUps;
+//    }
+
+    //траблы
+
+    public class TimeClassJumpRope implements ActionListener {
+
+        public TimeClassJumpRope(int count) {
             counterJumpRope = count;
         }
 
@@ -216,8 +219,8 @@ class Main extends JFrame {
 
             caloriesInHour = 100;
             caloriesInSecond = caloriesInHour / 3600;
-            counterJumpRope ++;
-            caloriesJumpRope ++;
+            counterJumpRope++;
+            caloriesJumpRope++;
             caloriesJumpRope = counterJumpRope * caloriesInSecond;
             if (counterJumpRope > 0) {
                 labelJumpRope.setText("JUMP ROPE - time: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope));
@@ -226,22 +229,19 @@ class Main extends JFrame {
 
     }
 
-    // время пошло , приседание
-    public class TimeClass2 implements ActionListener {
+    public class TimeClassSquats implements ActionListener {
 
-        // конструктор
-        public TimeClass2(int count) {
+        public TimeClassSquats(int count) {
             counterSquats = count;
         }
 
-        // время пошло приседание
         @Override
         public void actionPerformed(ActionEvent ts) {
 
             caloriesInHour = 200;
             caloriesInSecond = caloriesInHour / 3600;
-            counterSquats ++;
-            caloriesSquats ++;
+            counterSquats++;
+            caloriesSquats++;
             caloriesSquats = counterSquats * caloriesInSecond;
             if (counterSquats >= -1) {
 
@@ -250,23 +250,21 @@ class Main extends JFrame {
         }
     }
 
-    // клас имплементации события нажатия стоп
     class stopEventListener implements ActionListener {
 
         @Override
-        // обработка события нажатия на button start
         public void actionPerformed(ActionEvent e) {
 
-            float caloriesJumpRopeymm;      // общий затрат трех тренировок калорий
-            long counterJumpRopeymm;        // времени
+            float caloriesJumpRopeymm;
+            long counterJumpRopeymm;
 
-            timerPushUps.stop();
-            timerJumpRope.stop();
-            timerSquats.stop();
+            timePushUps.stop();
+            timeJumpRope.stop();
+            timeSquats.stop();
 
             int counterPushUpsper = 0;
             int counterJumpRopeper = 0;
-            int counterpper = 0;
+            int counterSquatsper = 0;
             float caloriesPushUosper = 0;
             float caloriesJumpRopeper = 0;
             float caloriesSquatsper = 0;
@@ -277,7 +275,7 @@ class Main extends JFrame {
 
                 try {
 
-                    file.createNewFile();       //если нет, создать файл
+                    file.createNewFile();
 
                 } catch (IOException ioException) {
 
@@ -295,21 +293,22 @@ class Main extends JFrame {
                     fileNotFoundException.printStackTrace();
                 }
 
-                ObjectOutputStream oot = null;
+                ObjectOutputStream objectOutputStream = null;
+                //вынести логику в отдельный класс, траблы
 
                 try {
-                    oot = new ObjectOutputStream(fout);
-                    oot.writeInt(counterPushUpsper);        //запись всех переменных
-                    oot.writeInt(counterJumpRopeper);
-                    oot.writeInt(counterpper);
-                    oot.writeFloat(caloriesPushUosper);
-                    oot.writeFloat(caloriesJumpRopeper);
-                    oot.writeFloat(caloriesSquatsper);
+                    objectOutputStream = new ObjectOutputStream(fout);
+                    objectOutputStream.writeInt(counterPushUpsper);
+                    objectOutputStream.writeInt(counterJumpRopeper);
+                    objectOutputStream.writeInt(counterSquatsper);
+                    objectOutputStream.writeFloat(caloriesPushUosper);
+                    objectOutputStream.writeFloat(caloriesJumpRopeper);
+                    objectOutputStream.writeFloat(caloriesSquatsper);
 
-                    caloriesJumpRopeymm = caloriesPushUos + caloriesSquats + caloriesJumpRope;    // реализуем сумму
+                    caloriesJumpRopeymm = caloriesPushUps + caloriesSquats + caloriesJumpRope;
                     counterJumpRopeymm = counterPushUps + counterSquats + counterJumpRope;
 
-                    labelPushUpsResult.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUos) + ";");
+                    labelPushUpsResult.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps) + ";");
 
                     labelJumpRopeResults.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope) + ";");
 
@@ -319,12 +318,12 @@ class Main extends JFrame {
                             + df.format(caloriesJumpRopeymm));      // выведем результаты первой тренировки
                     counterPushUpsper = counterPushUps;
                     counterJumpRopeper = counterJumpRope;
-                    counterpper = counterSquats;
-                    caloriesPushUosper = caloriesPushUos;
+                    counterSquatsper = counterSquats;
+                    caloriesPushUosper = caloriesPushUps;
                     caloriesJumpRopeper = caloriesJumpRope;
                     caloriesSquatsper = caloriesSquats;     //приравняем наши переменнные для записи в файл после if else
 
-                    oot.close();
+                    objectOutputStream.close();
 
                 } catch (IOException ioException) {
 
@@ -333,76 +332,74 @@ class Main extends JFrame {
 
             } else {
 
-                FileInputStream fin = null;
+                FileInputStream fileInputStream = null;
 
                 try {
 
-                    fin = new FileInputStream("data.txt");
+                    fileInputStream = new FileInputStream("data.txt");
 
                 } catch (FileNotFoundException fileNotFoundException) {
 
                     fileNotFoundException.printStackTrace();
                 }
 
-                ObjectInputStream oit = null;
+                ObjectInputStream objectInputStream = null;
 
                 try {
-                    oit = new ObjectInputStream(fin);
-                    counterPushUpsper = oit.readInt();        // иначе вытащем переменные для персистенции
-                    counterJumpRopeper = oit.readInt();
-                    counterpper = oit.readInt();
-                    caloriesPushUosper = oit.readFloat();
-                    caloriesJumpRopeper = oit.readFloat();
-                    caloriesSquatsper = oit.readFloat();
+                    objectInputStream = new ObjectInputStream(fileInputStream);
+                    counterPushUpsper = objectInputStream.readInt();
+                    counterJumpRopeper = objectInputStream.readInt();
+                    counterSquatsper = objectInputStream.readInt();
+                    caloriesPushUosper = objectInputStream.readFloat();
+                    caloriesJumpRopeper = objectInputStream.readFloat();
+                    caloriesSquatsper = objectInputStream.readFloat();
 
-                    counterPushUpsper = counterPushUpsper + counterPushUps;       // сложем их с дааными за одну серию
+                    counterPushUpsper = counterPushUpsper + counterPushUps;
                     counterJumpRopeper = counterJumpRopeper + counterJumpRope;
-                    counterpper = counterpper + counterSquats;
-                    caloriesPushUosper = caloriesPushUosper + caloriesPushUos;
+                    counterSquatsper = counterSquatsper + counterSquats;
+                    caloriesPushUosper = caloriesPushUosper + caloriesPushUps;
                     caloriesJumpRopeper = caloriesJumpRopeper + caloriesJumpRope;
                     caloriesSquatsper = caloriesSquatsper + caloriesSquats;
 
-                    counterJumpRopeymm = counterPushUpsper + counterJumpRopeper + counterpper;
-                    caloriesJumpRopeymm = caloriesPushUosper + caloriesJumpRopeper + caloriesSquatsper;      //не забываем про сумму
+                    counterJumpRopeymm = counterPushUpsper + counterJumpRopeper + counterSquatsper;
+                    caloriesJumpRopeymm = caloriesPushUosper + caloriesJumpRopeper + caloriesSquatsper;
 
                     labelPushUpsResult.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUpsper) + " , calories " + df.format(caloriesPushUosper) + ";");
                     labelJumpRopeResults.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRopeper) + " , calories " + df.format(caloriesJumpRopeper) + ";");
-                    labelSquatsResults.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterpper) + " , calories " + df.format(caloriesSquatsper) + ";");
+                    labelSquatsResults.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquatsper) + " , calories " + df.format(caloriesSquatsper) + ";");
                     labelAllResults.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " calories "
                             + df.format(caloriesJumpRopeymm));      //вывод результатов
 
-                    oit.close();
+                    objectInputStream.close();
 
                 } catch (IOException ioException) {
 
                     ioException.printStackTrace();
                 }
             }
-            //выйдем из if  else и совершим запись, так мы запишем нужные данные вне зависимости от того
-            // какое из двух действий было совершенно программой
 
-            FileOutputStream fout = null;
+            FileOutputStream fileOutputStream = null;
             try {
 
-                fout = new FileOutputStream("data.txt");
+                fileOutputStream = new FileOutputStream("data.txt");
 
             } catch (FileNotFoundException fileNotFoundException) {
 
                 fileNotFoundException.printStackTrace();
             }
 
-            ObjectOutputStream oot = null;
+            ObjectOutputStream objectOutputStream = null;
 
             try {
-                oot = new ObjectOutputStream(fout);
-                oot.writeInt(counterPushUpsper);
-                oot.writeInt(counterJumpRopeper);
-                oot.writeInt(counterpper);
-                oot.writeFloat(caloriesPushUosper);
-                oot.writeFloat(caloriesJumpRopeper);
-                oot.writeFloat(caloriesSquatsper);
+                objectOutputStream = new ObjectOutputStream(fileOutputStream);
+                objectOutputStream.writeInt(counterPushUpsper);
+                objectOutputStream.writeInt(counterJumpRopeper);
+                objectOutputStream.writeInt(counterSquatsper);
+                objectOutputStream.writeFloat(caloriesPushUosper);
+                objectOutputStream.writeFloat(caloriesJumpRopeper);
+                objectOutputStream.writeFloat(caloriesSquatsper);
 
-                oot.close();
+                objectOutputStream.close();
 
             } catch (IOException ioException) {
                 ioException.printStackTrace();
@@ -410,13 +407,12 @@ class Main extends JFrame {
 
             trainingStatus.setText("Training is over, quit or start a new one");
 
-            //   timerCount = 0;
-            caloriesPushUos = 0;
+            caloriesPushUps = 0;
             caloriesJumpRope = 0;
             caloriesSquats = 0;
             counterPushUps = 0;
             counterJumpRope = 0;
-            counterSquats = 0;       // обнуление секундомеров за сессию
+            counterSquats = 0;      //обнуление всех таймеров в сессии
         }
     }
 
