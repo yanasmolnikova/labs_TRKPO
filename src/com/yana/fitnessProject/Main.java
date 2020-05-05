@@ -26,9 +26,9 @@ class Main extends JFrame {
     //  private int timerCount;
     // период срабатывания секундомером  для всех упражнений
 
-    private int timerDel = 0;
-    private int timerDel1 = 0;
-    private int timerDel2 = 0;
+    private int timerDelPushUps = 0;
+    private int timerDelJumpRope = 0;
+    private int timerDelSquats = 0;
     private float caloriesInHour;        //калория в 1 час
     private float caloriesPushUos, caloriesJumpRope, caloriesSquats;       //подсчет калорий
     private float caloriesInSecond;        // в одну секунду
@@ -63,28 +63,27 @@ class Main extends JFrame {
 
         initComponents();
 
-        TimeClass tc = new TimeClass(timerDel);
+        TimeClass timerClassPushUps = new TimeClass(timerDelPushUps);
 
-        timerPushUps = new Timer(timerStep, tc);
+        timerPushUps = new Timer(timerStep, timerClassPushUps);
 
-        TimeClass1 tc1 = new TimeClass1(timerDel1);
+        TimeClass1 timerClassJumpRope = new TimeClass1(timerDelJumpRope);
 
-        timerJumpRope = new Timer(timerStep, tc1);
+        timerJumpRope = new Timer(timerStep, timerClassJumpRope);
 
-        TimeClass2 tc2 = new TimeClass2(timerDel2);
+        TimeClass2 timerClassSquats = new TimeClass2(timerDelSquats);
 
-        timerSquats = new Timer(timerStep, tc2);
+        timerSquats = new Timer(timerStep, timerClassSquats);
     }
 
     // метод инициализации компонентов формы
     private void initComponents() throws IOException {
 
-        setBounds(15, 30, 500, 250);        //положение на экране
+        setBounds(15, 30, 1200, 200);        //положение на экране
 
-        setSize(800, 600);      // размер формы
+        setSize(1200, 300);      // размер формы
 
         Container container = getContentPane();     // контейнер для размещения компонентов формы
-
 
         trainingStatus.setPreferredSize(new Dimension(250, 20));        // окно вывода статуса тренировки
         trainingStatus.setSize(20, 20);
@@ -105,7 +104,7 @@ class Main extends JFrame {
         clearAllResults.addActionListener(new clearAllResultsEventListener());
 
         panelGoTraining.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("CHOOSE Training")));
-        panelGoTraining.setPreferredSize(new Dimension(400, 100));
+        panelGoTraining.setPreferredSize(new Dimension(400, 200));
         panelGoTraining.add(startPushUps);
         panelGoTraining.add(startJumpRope);
         panelGoTraining.add(startSquats);
@@ -120,6 +119,7 @@ class Main extends JFrame {
         panelTraining.add(labelSquats);
         panelTraining.setBackground(Color.orange);
 
+
         panelResults.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("RESULTS")));
         panelResults.setPreferredSize(new Dimension(400, 200));
         panelResults.add(labelPushUpsResult);
@@ -130,8 +130,8 @@ class Main extends JFrame {
         panelResults.setBackground(Color.lightGray);
 
         container.add(BorderLayout.WEST, panelGoTraining);
-        container.add(BorderLayout.EAST, panelTraining);
-        container.add(BorderLayout.SOUTH, panelResults);
+        container.add(BorderLayout.CENTER, panelTraining);
+        container.add(BorderLayout.EAST, panelResults);
     }
 
     // класс имплементации события нажатия старт
