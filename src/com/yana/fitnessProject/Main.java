@@ -17,6 +17,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import static com.yana.fitnessProject.Constants.TIMER_STEP;
+
 
 class Main extends JFrame {
 
@@ -28,25 +30,25 @@ class Main extends JFrame {
     private float caloriesInHour;
     private float caloriesPushUps, caloriesJumpRope, caloriesSquats;
     private float caloriesInSecond;
-    private int timerStep = 1000;   //шаг равен 1 секунде, период секундомера 1000мс = 1 сек
+    //private int timerStep = 1000;   //шаг равен 1 секунде, период секундомера 1000мс = 1 сек
 
     private JTextArea trainingStatus = new JTextArea("START YOUR TRAINING");
     private JScrollPane scrollPaneInput = new JScrollPane(trainingStatus);
-    private JPanel panelTraining = new JPanel();
-    private JPanel panelGoTraining = new JPanel();
-    private JPanel panelResults = new JPanel();
-    private JButton startPushUps = new JButton("Start PUSH UPS");
-    private JButton startJumpRope = new JButton("Start JUMP ROPE");
-    private JButton startSquats = new JButton("Start SQUATS");
-    private JButton stop = new JButton("STOP, SHOW MY RESULTS");
-    private JButton clearAllResults = new JButton("CLEAR ALL RESULTS");
-    private JLabel labelPushUps = new JLabel("");
-    private JLabel labelJumpRope = new JLabel("");
-    private JLabel labelSquats = new JLabel("");
-    private JLabel labelPushUpsResult = new JLabel("");
-    private JLabel labelJumpRopeResults = new JLabel("");
-    private JLabel labelSquatsResults = new JLabel("");
-    private JLabel labelAllResults = new JLabel("");
+    private JPanel trainingPanel = new JPanel();
+    private JPanel kindOfTrainingPanel = new JPanel();
+    private JPanel resultsPanel = new JPanel();
+    private JButton startPushUpsButton = new JButton("Start PUSH UPS");
+    private JButton startJumpRopeButton = new JButton("Start JUMP ROPE");
+    private JButton startSquatsButton = new JButton("Start SQUATS");
+    private JButton stopTrainingButton = new JButton("STOP, SHOW MY RESULTS");
+    private JButton clearAllResultsButton = new JButton("CLEAR ALL RESULTS");
+    private JLabel pushUpsLabel = new JLabel("");
+    private JLabel jumpRopeLabel = new JLabel("");
+    private JLabel squatsLabel = new JLabel("");
+    private JLabel pushUpsResultLabel = new JLabel("");
+    private JLabel jumpRopeResultsLabel = new JLabel("");
+    private JLabel squatsResultsLabel = new JLabel("");
+    private JLabel allResultsLabel = new JLabel("");
     private DecimalFormat df = new DecimalFormat("#####.##");
     private String fileName = "data.txt";
 
@@ -60,15 +62,15 @@ class Main extends JFrame {
 
         TimeClassPushUps timeClassPushUps = new TimeClassPushUps(timeDelPushUps);
 
-        timePushUps = new Timer(timerStep, timeClassPushUps);
+        timePushUps = new Timer(TIMER_STEP, timeClassPushUps);
 
         TimeClassJumpRope timeClassJumpRope = new TimeClassJumpRope(timeDelJumpRope);
 
-        timeJumpRope = new Timer(timerStep, timeClassJumpRope);
+        timeJumpRope = new Timer(TIMER_STEP, timeClassJumpRope);
 
         TimeClassSquats timeClassSquats = new TimeClassSquats(timeDelSquats);
 
-        timeSquats = new Timer(timerStep, timeClassSquats);
+        timeSquats = new Timer(TIMER_STEP, timeClassSquats);
     }
 
     private void initComponents() {
@@ -82,50 +84,49 @@ class Main extends JFrame {
         trainingStatus.setPreferredSize(new Dimension(250, 20));        // окно вывода статуса тренировки
         trainingStatus.setSize(20, 20);
 
-        startPushUps.setPreferredSize(new Dimension(200, 40));
-        startJumpRope.setPreferredSize(new Dimension(200, 40));
-        startSquats.setPreferredSize(new Dimension(200, 40));
+        startPushUpsButton.setPreferredSize(new Dimension(200, 40));
+        startJumpRopeButton.setPreferredSize(new Dimension(200, 40));
+        startSquatsButton.setPreferredSize(new Dimension(200, 40));
 
-        startPushUps.addActionListener(new startEventListenerPushUps());
-        startJumpRope.addActionListener(new startEventListenerJumpRope());
-        startSquats.addActionListener(new startEventListenerSquats());
+        startPushUpsButton.addActionListener(new startEventListenerPushUps());
+        startJumpRopeButton.addActionListener(new startEventListenerJumpRope());
+        startSquatsButton.addActionListener(new startEventListenerSquats());
 
-        stop.setPreferredSize(new Dimension(200, 40));
-        stop.addActionListener(new stopEventListener());
+        stopTrainingButton.setPreferredSize(new Dimension(200, 40));
+        stopTrainingButton.addActionListener(new stopTrainingButtonEventListener());
 
-        clearAllResults.setPreferredSize(new Dimension(200, 40));
+        clearAllResultsButton.setPreferredSize(new Dimension(200, 40));
 
-        clearAllResults.addActionListener(new clearAllResultsEventListener());
+        clearAllResultsButton.addActionListener(new clearAllResultsEventListener());
 
-        panelGoTraining.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("CHOOSE Training")));
-        panelGoTraining.setPreferredSize(new Dimension(400, 200));
-        panelGoTraining.add(startPushUps);
-        panelGoTraining.add(startJumpRope);
-        panelGoTraining.add(startSquats);
-        panelGoTraining.add(stop);
-        panelGoTraining.setBackground(Color.pink);
+        kindOfTrainingPanel.setPreferredSize(new Dimension(400, 200));
+        kindOfTrainingPanel.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("CHOOSE Training")));
+        kindOfTrainingPanel.add(startPushUpsButton);
+        kindOfTrainingPanel.add(startJumpRopeButton);
+        kindOfTrainingPanel.add(startSquatsButton);
+        kindOfTrainingPanel.add(stopTrainingButton);
+        kindOfTrainingPanel.setBackground(Color.pink);
 
-        panelTraining.add(BorderLayout.EAST, scrollPaneInput);
-        panelTraining.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("YOUR training")));
-        panelTraining.setPreferredSize(new Dimension(400, 200));
-        panelTraining.add(labelPushUps);
-        panelTraining.add(labelJumpRope);
-        panelTraining.add(labelSquats);
-        panelTraining.setBackground(Color.orange);
+        trainingPanel.add(BorderLayout.EAST, scrollPaneInput);
+        trainingPanel.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("YOUR training")));
+        trainingPanel.setPreferredSize(new Dimension(400, 200));
+        trainingPanel.add(pushUpsLabel);
+        trainingPanel.add(jumpRopeLabel);
+        trainingPanel.add(squatsLabel);
+        trainingPanel.setBackground(Color.orange);
 
+        resultsPanel.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("RESULTS")));
+        resultsPanel.setPreferredSize(new Dimension(400, 200));
+        resultsPanel.add(pushUpsResultLabel);
+        resultsPanel.add(jumpRopeResultsLabel);
+        resultsPanel.add(squatsResultsLabel);
+        resultsPanel.add(allResultsLabel);
+        resultsPanel.add(clearAllResultsButton);
+        resultsPanel.setBackground(Color.lightGray);
 
-        panelResults.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new TitledBorder("RESULTS")));
-        panelResults.setPreferredSize(new Dimension(400, 200));
-        panelResults.add(labelPushUpsResult);
-        panelResults.add(labelJumpRopeResults);
-        panelResults.add(labelSquatsResults);
-        panelResults.add(labelAllResults);
-        panelResults.add(clearAllResults);
-        panelResults.setBackground(Color.lightGray);
-
-        container.add(BorderLayout.WEST, panelGoTraining);
-        container.add(BorderLayout.CENTER, panelTraining);
-        container.add(BorderLayout.EAST, panelResults);
+        container.add(BorderLayout.WEST, kindOfTrainingPanel);
+        container.add(BorderLayout.CENTER, trainingPanel);
+        container.add(BorderLayout.EAST, resultsPanel);
     }
 
     class startEventListenerPushUps implements ActionListener {
@@ -141,8 +142,6 @@ class Main extends JFrame {
             timeSquats.stop();
         }
     }
-    //EventListener eventListener = new EventListener("PUSH UPS", trainingStatus, timePushUps, timeJumpRope, timeSquats);
-    //траблы
 
     class startEventListenerJumpRope implements ActionListener {
 
@@ -175,12 +174,10 @@ class Main extends JFrame {
 
     public class TimeClassPushUps implements ActionListener {
 
-        // конструктор
         public TimeClassPushUps(int count) {
             counterPushUps = count;
         }
 
-        // время пошло , отжимание
         @Override
         public void actionPerformed(ActionEvent ts) {
 
@@ -191,22 +188,10 @@ class Main extends JFrame {
             caloriesPushUps = counterPushUps * caloriesInSecond;        // формулы для подсчета
             if (counterPushUps > 0) {
                 // если время пошло, появляется надпись
-                labelPushUps.setText("PUSH UPS - time: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps));
+                pushUpsLabel.setText("PUSH UPS - time: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps));
             }
         }
     }
-
-//    TimeClass timeClassPushUps = new TimeClass(counterPushUps, "PUSH UPS", labelPushUps, df);
-//
-//    public TimeClass getTimeClassPushUps() {
-//        return timeClassPushUps;
-//    }
-//
-//    public void setTimeClassPushUps(TimeClass timeClassPushUps) {
-//        this.timeClassPushUps = timeClassPushUps;
-//    }
-
-    //траблы
 
     public class TimeClassJumpRope implements ActionListener {
 
@@ -223,7 +208,7 @@ class Main extends JFrame {
             caloriesJumpRope++;
             caloriesJumpRope = counterJumpRope * caloriesInSecond;
             if (counterJumpRope > 0) {
-                labelJumpRope.setText("JUMP ROPE - time: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope));
+                jumpRopeLabel.setText("JUMP ROPE - time: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope));
             }
         }
 
@@ -245,12 +230,12 @@ class Main extends JFrame {
             caloriesSquats = counterSquats * caloriesInSecond;
             if (counterSquats >= -1) {
 
-                labelSquats.setText("SQUATS - time: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats));
+                squatsLabel.setText("SQUATS - time: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats));
             }
         }
     }
 
-    class stopEventListener implements ActionListener {
+    class stopTrainingButtonEventListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -294,7 +279,8 @@ class Main extends JFrame {
                 }
 
                 ObjectOutputStream objectOutputStream = null;
-                //вынести логику в отдельный класс, траблы
+
+                //вынести логику в отдельный класс
 
                 try {
                     objectOutputStream = new ObjectOutputStream(fout);
@@ -308,20 +294,20 @@ class Main extends JFrame {
                     caloriesJumpRopeymm = caloriesPushUps + caloriesSquats + caloriesJumpRope;
                     counterJumpRopeymm = counterPushUps + counterSquats + counterJumpRope;
 
-                    labelPushUpsResult.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps) + ";");
+                    pushUpsResultLabel.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps) + ";");
 
-                    labelJumpRopeResults.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope) + ";");
+                    jumpRopeResultsLabel.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope) + ";");
 
-                    labelSquatsResults.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats) + ";");
+                    squatsResultsLabel.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats) + ";");
 
-                    labelAllResults.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " , calories "
+                    allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " , calories "
                             + df.format(caloriesJumpRopeymm));      // выведем результаты первой тренировки
                     counterPushUpsper = counterPushUps;
                     counterJumpRopeper = counterJumpRope;
                     counterSquatsper = counterSquats;
                     caloriesPushUosper = caloriesPushUps;
                     caloriesJumpRopeper = caloriesJumpRope;
-                    caloriesSquatsper = caloriesSquats;     //приравняем наши переменнные для записи в файл после if else
+                    caloriesSquatsper = caloriesSquats;
 
                     objectOutputStream.close();
 
@@ -364,10 +350,10 @@ class Main extends JFrame {
                     counterJumpRopeymm = counterPushUpsper + counterJumpRopeper + counterSquatsper;
                     caloriesJumpRopeymm = caloriesPushUosper + caloriesJumpRopeper + caloriesSquatsper;
 
-                    labelPushUpsResult.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUpsper) + " , calories " + df.format(caloriesPushUosper) + ";");
-                    labelJumpRopeResults.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRopeper) + " , calories " + df.format(caloriesJumpRopeper) + ";");
-                    labelSquatsResults.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquatsper) + " , calories " + df.format(caloriesSquatsper) + ";");
-                    labelAllResults.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " calories "
+                    pushUpsResultLabel.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUpsper) + " , calories " + df.format(caloriesPushUosper) + ";");
+                    jumpRopeResultsLabel.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRopeper) + " , calories " + df.format(caloriesJumpRopeper) + ";");
+                    squatsResultsLabel.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquatsper) + " , calories " + df.format(caloriesSquatsper) + ";");
+                    allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " calories "
                             + df.format(caloriesJumpRopeymm));      //вывод результатов
 
                     objectInputStream.close();
@@ -427,14 +413,14 @@ class Main extends JFrame {
 
             }
 
-            labelPushUps.setText("");
-            labelJumpRope.setText("");
-            labelSquats.setText("");
+            pushUpsLabel.setText("");
+            jumpRopeLabel.setText("");
+            squatsLabel.setText("");
 
-            labelPushUpsResult.setText("All results are cleared");
-            labelJumpRopeResults.setText("");
-            labelSquatsResults.setText("");
-            labelAllResults.setText("");
+            pushUpsResultLabel.setText("All results are cleared");
+            jumpRopeResultsLabel.setText("");
+            squatsResultsLabel.setText("");
+            allResultsLabel.setText("");
         }
     }
 
