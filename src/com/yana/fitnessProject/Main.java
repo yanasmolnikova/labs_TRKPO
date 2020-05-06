@@ -204,7 +204,6 @@ class Main extends JFrame {
                 jumpRopeLabel.setText(JUMP_ROPE + TIME + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope));
             }
         }
-
     }
 
     public class TimeClassSquats implements ActionListener {
@@ -400,7 +399,6 @@ class Main extends JFrame {
             if ((new File(fileName)).exists()) {
                 File file = new File("data.txt");
                 file.delete();
-
             }
 
             pushUpsLabel.setText("");
