@@ -129,7 +129,7 @@ class Main extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent actionEventPushUps) {
-            trainingStatus.setText("PUSH UPS");
+            trainingStatus.setText(PUSH_UPS);
 
             timePushUps.start();
             timePushUps.setRepeats(true);
@@ -144,7 +144,7 @@ class Main extends JFrame {
         @Override
         public void actionPerformed(ActionEvent actionEventJumpRope) {
 
-            trainingStatus.setText("JUMP ROPE");
+            trainingStatus.setText(JUMP_ROPE);
 
             timeJumpRope.start();
             timeJumpRope.setRepeats(true);
@@ -158,7 +158,7 @@ class Main extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent actionEventSquats) {
-            trainingStatus.setText("SQUATS");
+            trainingStatus.setText(SQUATS);
 
             timeSquats.start();
             timeSquats.setRepeats(true);
@@ -182,7 +182,7 @@ class Main extends JFrame {
             caloriesPushUps = counterPushUps * CALORIES_PER_SECOND_PUSH_UPS;
 
             if (counterPushUps > 0) {
-                pushUpsLabel.setText(PUSH_UPS + TIME + LocalTime.ofSecondOfDay(counterPushUps) + CALORIES + df.format(caloriesPushUps));
+                pushUpsLabel.setText(PUSH_UPS + " - " + TIME + LocalTime.ofSecondOfDay(counterPushUps) + CALORIES + df.format(caloriesPushUps));
             }
         }
     }
@@ -201,7 +201,7 @@ class Main extends JFrame {
             caloriesJumpRope = counterJumpRope * CALORIES_PER_SECOND_JUMP_ROPE;
 
             if (counterJumpRope > 0) {
-                jumpRopeLabel.setText(JUMP_ROPE + TIME + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope));
+                jumpRopeLabel.setText(JUMP_ROPE + " - " + TIME + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope));
             }
         }
     }
@@ -221,7 +221,7 @@ class Main extends JFrame {
 
             if (counterSquats >= -1) {
 
-                squatsLabel.setText(SQUATS + TIME + LocalTime.ofSecondOfDay(counterSquats) + CALORIES + df.format(caloriesSquats));
+                squatsLabel.setText(SQUATS + " - " + TIME + LocalTime.ofSecondOfDay(counterSquats) + CALORIES + df.format(caloriesSquats));
             }
         }
     }
@@ -231,19 +231,19 @@ class Main extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            float caloriesJumpRopeymm;
-            long counterJumpRopeymm;
+            float caloriesResult;
+            long timeResult;
 
             timePushUps.stop();
             timeJumpRope.stop();
             timeSquats.stop();
 
-            int counterPushUpsper = 0;
-            int counterJumpRopeper = 0;
-            int counterSquatsper = 0;
-            float caloriesPushUosper = 0;
-            float caloriesJumpRopeper = 0;
-            float caloriesSquatsper = 0;
+            int counterPushUpsPer = 0;
+            int counterJumpRopePer = 0;
+            int counterSquatsPer = 0;
+            float caloriesPushUpsPer = 0;
+            float caloriesJumpRopePer = 0;
+            float caloriesSquatsPer = 0;
 
             if (!(new File(fileName)).exists()) {
 
@@ -273,31 +273,31 @@ class Main extends JFrame {
 
                 try {
                     objectOutputStream = new ObjectOutputStream(fout);
-                    objectOutputStream.writeInt(counterPushUpsper);
-                    objectOutputStream.writeInt(counterJumpRopeper);
-                    objectOutputStream.writeInt(counterSquatsper);
-                    objectOutputStream.writeFloat(caloriesPushUosper);
-                    objectOutputStream.writeFloat(caloriesJumpRopeper);
-                    objectOutputStream.writeFloat(caloriesSquatsper);
+                    objectOutputStream.writeInt(counterPushUpsPer);
+                    objectOutputStream.writeInt(counterJumpRopePer);
+                    objectOutputStream.writeInt(counterSquatsPer);
+                    objectOutputStream.writeFloat(caloriesPushUpsPer);
+                    objectOutputStream.writeFloat(caloriesJumpRopePer);
+                    objectOutputStream.writeFloat(caloriesSquatsPer);
 
-                    caloriesJumpRopeymm = caloriesPushUps + caloriesSquats + caloriesJumpRope;
-                    counterJumpRopeymm = counterPushUps + counterSquats + counterJumpRope;
+                    caloriesResult = caloriesPushUps + caloriesSquats + caloriesJumpRope;
+                    timeResult = counterPushUps + counterSquats + counterJumpRope;
 
-                    pushUpsResultLabel.setText(PUSH_UPS + LocalTime.ofSecondOfDay(counterPushUps) + CALORIES + df.format(caloriesPushUps) + ";");
+                    pushUpsResultLabel.setText(PUSH_UPS + " - " + LocalTime.ofSecondOfDay(counterPushUps) + CALORIES + df.format(caloriesPushUps) + ";");
 
-                    jumpRopeResultsLabel.setText(JUMP_ROPE + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope) + ";");
+                    jumpRopeResultsLabel.setText(JUMP_ROPE + " - " + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope) + ";");
 
-                    squatsResultsLabel.setText(SQUATS + LocalTime.ofSecondOfDay(counterSquats) + CALORIES + df.format(caloriesSquats) + ";");
+                    squatsResultsLabel.setText(SQUATS + " - " + LocalTime.ofSecondOfDay(counterSquats) + CALORIES + df.format(caloriesSquats) + ";");
 
-                    allResultsLabel.setText(ALL_RESULTS + LocalTime.ofSecondOfDay(counterJumpRopeymm) + CALORIES
-                            + df.format(caloriesJumpRopeymm));      // результаты тренировки
+                    allResultsLabel.setText(ALL_RESULTS + LocalTime.ofSecondOfDay(timeResult) + CALORIES
+                            + df.format(caloriesResult));      // результаты тренировки
 
-                    counterPushUpsper = counterPushUps;
-                    counterJumpRopeper = counterJumpRope;
-                    counterSquatsper = counterSquats;
-                    caloriesPushUosper = caloriesPushUps;
-                    caloriesJumpRopeper = caloriesJumpRope;
-                    caloriesSquatsper = caloriesSquats;
+                    counterPushUpsPer = counterPushUps;
+                    counterJumpRopePer = counterJumpRope;
+                    counterSquatsPer = counterSquats;
+                    caloriesPushUpsPer = caloriesPushUps;
+                    caloriesJumpRopePer = caloriesJumpRope;
+                    caloriesSquatsPer = caloriesSquats;
 
                     objectOutputStream.close();
 
@@ -323,28 +323,28 @@ class Main extends JFrame {
 
                 try {
                     objectInputStream = new ObjectInputStream(fileInputStream);
-                    counterPushUpsper = objectInputStream.readInt();
-                    counterJumpRopeper = objectInputStream.readInt();
-                    counterSquatsper = objectInputStream.readInt();
-                    caloriesPushUosper = objectInputStream.readFloat();
-                    caloriesJumpRopeper = objectInputStream.readFloat();
-                    caloriesSquatsper = objectInputStream.readFloat();
+                    counterPushUpsPer = objectInputStream.readInt();
+                    counterJumpRopePer = objectInputStream.readInt();
+                    counterSquatsPer = objectInputStream.readInt();
+                    caloriesPushUpsPer = objectInputStream.readFloat();
+                    caloriesJumpRopePer = objectInputStream.readFloat();
+                    caloriesSquatsPer = objectInputStream.readFloat();
 
-                    counterPushUpsper = counterPushUpsper + counterPushUps;
-                    counterJumpRopeper = counterJumpRopeper + counterJumpRope;
-                    counterSquatsper = counterSquatsper + counterSquats;
-                    caloriesPushUosper = caloriesPushUosper + caloriesPushUps;
-                    caloriesJumpRopeper = caloriesJumpRopeper + caloriesJumpRope;
-                    caloriesSquatsper = caloriesSquatsper + caloriesSquats;
+                    counterPushUpsPer = counterPushUpsPer + counterPushUps;
+                    counterJumpRopePer = counterJumpRopePer + counterJumpRope;
+                    counterSquatsPer = counterSquatsPer + counterSquats;
+                    caloriesPushUpsPer = caloriesPushUpsPer + caloriesPushUps;
+                    caloriesJumpRopePer = caloriesJumpRopePer + caloriesJumpRope;
+                    caloriesSquatsPer = caloriesSquatsPer + caloriesSquats;
 
-                    counterJumpRopeymm = counterPushUpsper + counterJumpRopeper + counterSquatsper;
-                    caloriesJumpRopeymm = caloriesPushUosper + caloriesJumpRopeper + caloriesSquatsper;
+                    timeResult = counterPushUpsPer + counterJumpRopePer + counterSquatsPer;
+                    caloriesResult = caloriesPushUpsPer + caloriesJumpRopePer + caloriesSquatsPer;
 
-                    pushUpsResultLabel.setText(PUSH_UPS + LocalTime.ofSecondOfDay(counterPushUpsper) + CALORIES + df.format(caloriesPushUosper) + ";");
-                    jumpRopeResultsLabel.setText(JUMP_ROPE + LocalTime.ofSecondOfDay(counterJumpRopeper) + CALORIES + df.format(caloriesJumpRopeper) + ";");
-                    squatsResultsLabel.setText(SQUATS + LocalTime.ofSecondOfDay(counterSquatsper) + CALORIES + df.format(caloriesSquatsper) + ";");
-                    allResultsLabel.setText(ALL_RESULTS + LocalTime.ofSecondOfDay(counterJumpRopeymm) + CALORIES
-                            + df.format(caloriesJumpRopeymm));
+                    pushUpsResultLabel.setText(PUSH_UPS + " - " + LocalTime.ofSecondOfDay(counterPushUpsPer) + CALORIES + df.format(caloriesPushUpsPer) + ";");
+                    jumpRopeResultsLabel.setText(JUMP_ROPE + " - " + LocalTime.ofSecondOfDay(counterJumpRopePer) + CALORIES + df.format(caloriesJumpRopePer) + ";");
+                    squatsResultsLabel.setText(SQUATS + " - " + LocalTime.ofSecondOfDay(counterSquatsPer) + CALORIES + df.format(caloriesSquatsPer) + ";");
+                    allResultsLabel.setText(ALL_RESULTS + " - " + LocalTime.ofSecondOfDay(timeResult) + CALORIES
+                            + df.format(caloriesResult));
 
                     objectInputStream.close();
 
@@ -368,12 +368,12 @@ class Main extends JFrame {
 
             try {
                 objectOutputStream = new ObjectOutputStream(fileOutputStream);
-                objectOutputStream.writeInt(counterPushUpsper);
-                objectOutputStream.writeInt(counterJumpRopeper);
-                objectOutputStream.writeInt(counterSquatsper);
-                objectOutputStream.writeFloat(caloriesPushUosper);
-                objectOutputStream.writeFloat(caloriesJumpRopeper);
-                objectOutputStream.writeFloat(caloriesSquatsper);
+                objectOutputStream.writeInt(counterPushUpsPer);
+                objectOutputStream.writeInt(counterJumpRopePer);
+                objectOutputStream.writeInt(counterSquatsPer);
+                objectOutputStream.writeFloat(caloriesPushUpsPer);
+                objectOutputStream.writeFloat(caloriesJumpRopePer);
+                objectOutputStream.writeFloat(caloriesSquatsPer);
 
                 objectOutputStream.close();
 
