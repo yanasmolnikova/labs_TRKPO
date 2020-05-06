@@ -346,8 +346,8 @@ class Main extends JFrame {
                     pushUpsResultLabel.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUpsper) + " , calories " + df.format(caloriesPushUosper) + ";");
                     jumpRopeResultsLabel.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRopeper) + " , calories " + df.format(caloriesJumpRopeper) + ";");
                     squatsResultsLabel.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquatsper) + " , calories " + df.format(caloriesSquatsper) + ";");
-                    allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " calories "
-                            + df.format(caloriesJumpRopeymm));      //вывод результатов
+                    allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " , calories "
+                            + df.format(caloriesJumpRopeymm));
 
                     objectInputStream.close();
 
