@@ -12,12 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.Timer;// у нас он будет секундомером
+import javax.swing.Timer;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import static com.yana.fitnessProject.Constants.TIMER_STEP;
+import static com.yana.fitnessProject.Constants.*;
 
 
 class Main extends JFrame {
@@ -27,10 +27,9 @@ class Main extends JFrame {
     private int timeDelPushUps = 0;
     private int timeDelJumpRope = 0;
     private int timeDelSquats = 0;
-    private float caloriesInHour;
+    //private float caloriesInHour;
     private float caloriesPushUps, caloriesJumpRope, caloriesSquats;
-    private float caloriesInSecond;
-    //private int timerStep = 1000;   //шаг равен 1 секунде, период секундомера 1000мс = 1 сек
+    //private float caloriesInSecond;
 
     private JTextArea trainingStatus = new JTextArea("START YOUR TRAINING");
     private JScrollPane scrollPaneInput = new JScrollPane(trainingStatus);
@@ -56,7 +55,7 @@ class Main extends JFrame {
     private Timer timeJumpRope;
     private Timer timeSquats;
 
-    public Main() throws IOException {
+    public Main(){
 
         initComponents();
 
@@ -181,13 +180,10 @@ class Main extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ts) {
 
-            caloriesInHour = 30;        // за один час
-            caloriesInSecond = caloriesInHour / 3600;       // в одну секунду
             counterPushUps ++;       // секундомер текущий
             caloriesPushUps ++;     // текущий подсчет
-            caloriesPushUps = counterPushUps * caloriesInSecond;        // формулы для подсчета
+            caloriesPushUps = counterPushUps * CALORIES_PER_SECOND_PUSH_UPS;        // формулы для подсчета
             if (counterPushUps > 0) {
-                // если время пошло, появляется надпись
                 pushUpsLabel.setText("PUSH UPS - time: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps));
             }
         }
@@ -202,11 +198,9 @@ class Main extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ts1) {
 
-            caloriesInHour = 100;
-            caloriesInSecond = caloriesInHour / 3600;
             counterJumpRope++;
             caloriesJumpRope++;
-            caloriesJumpRope = counterJumpRope * caloriesInSecond;
+            caloriesJumpRope = counterJumpRope * CALORIES_PER_SECOND_JUMP_ROPE;
             if (counterJumpRope > 0) {
                 jumpRopeLabel.setText("JUMP ROPE - time: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope));
             }
@@ -223,11 +217,9 @@ class Main extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ts) {
 
-            caloriesInHour = 200;
-            caloriesInSecond = caloriesInHour / 3600;
             counterSquats++;
             caloriesSquats++;
-            caloriesSquats = counterSquats * caloriesInSecond;
+            caloriesSquats = counterSquats * CALORIES_PER_SECOND_SQUATS;
             if (counterSquats >= -1) {
 
                 squatsLabel.setText("SQUATS - time: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats));
@@ -302,6 +294,7 @@ class Main extends JFrame {
 
                     allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " , calories "
                             + df.format(caloriesJumpRopeymm));      // выведем результаты первой тренировки
+
                     counterPushUpsper = counterPushUps;
                     counterJumpRopeper = counterJumpRope;
                     counterSquatsper = counterSquats;
