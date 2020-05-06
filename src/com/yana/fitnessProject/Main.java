@@ -19,7 +19,6 @@ import javax.swing.border.TitledBorder;
 
 import static com.yana.fitnessProject.Constants.*;
 
-
 class Main extends JFrame {
 
     private int counterPushUps, counterJumpRope, counterSquats;     //время для каждой тренировки
@@ -27,9 +26,7 @@ class Main extends JFrame {
     private int timeDelPushUps = 0;
     private int timeDelJumpRope = 0;
     private int timeDelSquats = 0;
-    //private float caloriesInHour;
     private float caloriesPushUps, caloriesJumpRope, caloriesSquats;
-    //private float caloriesInSecond;
 
     private JTextArea trainingStatus = new JTextArea("START YOUR TRAINING");
     private JScrollPane scrollPaneInput = new JScrollPane(trainingStatus);
@@ -131,13 +128,13 @@ class Main extends JFrame {
     class startEventListenerPushUps implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {        // обработка события нажатия на button start отжимание
+        public void actionPerformed(ActionEvent actionEventPushUps) {
             trainingStatus.setText("PUSH UPS");
 
             timePushUps.start();
-            timePushUps.setRepeats(true);      // старт секундомера с повторением
+            timePushUps.setRepeats(true);
 
-            timeJumpRope.stop();       // остановка других секундомеров, если они включены
+            timeJumpRope.stop();
             timeSquats.stop();
         }
     }
@@ -145,7 +142,7 @@ class Main extends JFrame {
     class startEventListenerJumpRope implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent actionEventJumpRope) {
 
             trainingStatus.setText("JUMP ROPE");
 
@@ -160,7 +157,7 @@ class Main extends JFrame {
     class startEventListenerSquats implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent actionEventSquats) {
             trainingStatus.setText("SQUATS");
 
             timeSquats.start();
@@ -178,13 +175,14 @@ class Main extends JFrame {
         }
 
         @Override
-        public void actionPerformed(ActionEvent ts) {
+        public void actionPerformed(ActionEvent pushUpStart) {
 
-            counterPushUps ++;       // секундомер текущий
-            caloriesPushUps ++;     // текущий подсчет
-            caloriesPushUps = counterPushUps * CALORIES_PER_SECOND_PUSH_UPS;        // формулы для подсчета
+            counterPushUps++;
+            caloriesPushUps++;
+            caloriesPushUps = counterPushUps * CALORIES_PER_SECOND_PUSH_UPS;
+
             if (counterPushUps > 0) {
-                pushUpsLabel.setText("PUSH UPS - time: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps));
+                pushUpsLabel.setText(PUSH_UPS + TIME + LocalTime.ofSecondOfDay(counterPushUps) + CALORIES + df.format(caloriesPushUps));
             }
         }
     }
@@ -196,13 +194,14 @@ class Main extends JFrame {
         }
 
         @Override
-        public void actionPerformed(ActionEvent ts1) {
+        public void actionPerformed(ActionEvent jumpRopeStart) {
 
             counterJumpRope++;
             caloriesJumpRope++;
             caloriesJumpRope = counterJumpRope * CALORIES_PER_SECOND_JUMP_ROPE;
+
             if (counterJumpRope > 0) {
-                jumpRopeLabel.setText("JUMP ROPE - time: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope));
+                jumpRopeLabel.setText(JUMP_ROPE + TIME + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope));
             }
         }
 
@@ -215,14 +214,15 @@ class Main extends JFrame {
         }
 
         @Override
-        public void actionPerformed(ActionEvent ts) {
+        public void actionPerformed(ActionEvent squatsStart) {
 
             counterSquats++;
             caloriesSquats++;
             caloriesSquats = counterSquats * CALORIES_PER_SECOND_SQUATS;
+
             if (counterSquats >= -1) {
 
-                squatsLabel.setText("SQUATS - time: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats));
+                squatsLabel.setText(SQUATS + TIME + LocalTime.ofSecondOfDay(counterSquats) + CALORIES + df.format(caloriesSquats));
             }
         }
     }
@@ -272,8 +272,6 @@ class Main extends JFrame {
 
                 ObjectOutputStream objectOutputStream = null;
 
-                //вынести логику в отдельный класс
-
                 try {
                     objectOutputStream = new ObjectOutputStream(fout);
                     objectOutputStream.writeInt(counterPushUpsper);
@@ -286,14 +284,14 @@ class Main extends JFrame {
                     caloriesJumpRopeymm = caloriesPushUps + caloriesSquats + caloriesJumpRope;
                     counterJumpRopeymm = counterPushUps + counterSquats + counterJumpRope;
 
-                    pushUpsResultLabel.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUps) + " , calories " + df.format(caloriesPushUps) + ";");
+                    pushUpsResultLabel.setText(PUSH_UPS + LocalTime.ofSecondOfDay(counterPushUps) + CALORIES + df.format(caloriesPushUps) + ";");
 
-                    jumpRopeResultsLabel.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRope) + " , calories " + df.format(caloriesJumpRope) + ";");
+                    jumpRopeResultsLabel.setText(JUMP_ROPE + LocalTime.ofSecondOfDay(counterJumpRope) + CALORIES + df.format(caloriesJumpRope) + ";");
 
-                    squatsResultsLabel.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquats) + " , calories " + df.format(caloriesSquats) + ";");
+                    squatsResultsLabel.setText(SQUATS + LocalTime.ofSecondOfDay(counterSquats) + CALORIES + df.format(caloriesSquats) + ";");
 
-                    allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " , calories "
-                            + df.format(caloriesJumpRopeymm));      // выведем результаты первой тренировки
+                    allResultsLabel.setText(ALL_RESULTS + LocalTime.ofSecondOfDay(counterJumpRopeymm) + CALORIES
+                            + df.format(caloriesJumpRopeymm));      // результаты тренировки
 
                     counterPushUpsper = counterPushUps;
                     counterJumpRopeper = counterJumpRope;
@@ -343,10 +341,10 @@ class Main extends JFrame {
                     counterJumpRopeymm = counterPushUpsper + counterJumpRopeper + counterSquatsper;
                     caloriesJumpRopeymm = caloriesPushUosper + caloriesJumpRopeper + caloriesSquatsper;
 
-                    pushUpsResultLabel.setText("PUSH UPS: " + LocalTime.ofSecondOfDay(counterPushUpsper) + " , calories " + df.format(caloriesPushUosper) + ";");
-                    jumpRopeResultsLabel.setText("JUMP ROPE: " + LocalTime.ofSecondOfDay(counterJumpRopeper) + " , calories " + df.format(caloriesJumpRopeper) + ";");
-                    squatsResultsLabel.setText("SQUATS: " + LocalTime.ofSecondOfDay(counterSquatsper) + " , calories " + df.format(caloriesSquatsper) + ";");
-                    allResultsLabel.setText("All results: " + LocalTime.ofSecondOfDay(counterJumpRopeymm) + " , calories "
+                    pushUpsResultLabel.setText(PUSH_UPS + LocalTime.ofSecondOfDay(counterPushUpsper) + CALORIES + df.format(caloriesPushUosper) + ";");
+                    jumpRopeResultsLabel.setText(JUMP_ROPE + LocalTime.ofSecondOfDay(counterJumpRopeper) + CALORIES + df.format(caloriesJumpRopeper) + ";");
+                    squatsResultsLabel.setText(SQUATS + LocalTime.ofSecondOfDay(counterSquatsper) + CALORIES + df.format(caloriesSquatsper) + ";");
+                    allResultsLabel.setText(ALL_RESULTS + LocalTime.ofSecondOfDay(counterJumpRopeymm) + CALORIES
                             + df.format(caloriesJumpRopeymm));
 
                     objectInputStream.close();
@@ -391,18 +389,17 @@ class Main extends JFrame {
             caloriesSquats = 0;
             counterPushUps = 0;
             counterJumpRope = 0;
-            counterSquats = 0;      //обнуление всех таймеров в сессии
+            counterSquats = 0;
         }
     }
 
     class clearAllResultsEventListener implements ActionListener {
         @Override
-        // обработка события нажатия на кнопку обнуление
         public void actionPerformed(ActionEvent tsn) {
 
             if ((new File(fileName)).exists()) {
                 File file = new File("data.txt");
-                file.delete();      //если есть удалить
+                file.delete();
 
             }
 
@@ -417,7 +414,7 @@ class Main extends JFrame {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
 
         Main graphic = new Main();
         graphic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
